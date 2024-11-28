@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEIMonitor - Universidad César Vallejo</title>
+    <style>
+        /* Fondo con imagen */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+        }
+
+        /* Contenedor principal */
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Logo */
+        .logo {
+            max-width: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #00796b;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #004d40;
+            margin-bottom: 20px;
+        }
+
+        /* Campos de entrada */
+        input[type="text"], input[type="number"] {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #00796b;
+            font-size: 1em;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #004d40;
+        }
+
+        /* Botón */
+        button {
+            padding: 15px 25px;
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        /* Resultados */
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .result.green {
+            color: #388e3c;
+        }
+
+        .result.orange {
+            color: #f57c00;
+        }
+
+        .result.red {
+            color: #d32f2f;
+        }
+
+        .final-thanks {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #004d40;
+            font-weight: bold;
+        }
+
+        /* Información sobre cómo calcular el GEI */
+        .info {
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #555;
+            text-align: left;
+            background-color: #f1f8e9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .info h3 {
+            color: #00796b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo de la Universidad César Vallejo -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Logo_Universidad_C%C3%A9sar_Vallejo.png" alt="Universidad César Vallejo" class="logo">
+        
+        <h1>GEIMonitor</h1>
+        <p class="subtitle">Tu medidor ideal</p>
+
+        <p>Introduce tus datos y mide el impacto de los GEI en tu zona:</p>
+        
+        <!-- Campos de entrada de nombre, zona y porcentaje de GEI -->
+        <input type="text" id="nombreInput" placeholder="Tu nombre">
+        <input type="text" id="zonaInput" placeholder="Tu zona (ej. Lima, Arequipa)">
+        <input type="number" id="geiInput" placeholder="Porcentaje de GEI en tu zona (0-100)">
+        
+        <button onclick="calcularImpacto()">Calcular</button>
+        
+        <div class="result" id="resultado"></div>
+
+        <!-- Mensaje final -->
+        <div class="final-thanks" id="gracias"></div>
+
+        <!-- Información sobre cómo calcular el GEI -->
+        <div class="info">
+            <h3>¿Cómo calcular el porcentaje de GEI en tu zona?</h3>
+            <p>1. Identifica las principales fuentes de emisión de GEI en tu zona (transporte, industria, energía, agricultura, etc.).</p>
+            <p>2. Obtén los datos de emisiones de CO₂, metano, y otros gases de efecto invernadero de esas fuentes.</p>
+            <p>3. Suma las emisiones de tu zona.</p>
+            <p>4. Compara con las emisiones globales o nacionales para obtener el porcentaje usando la fórmula:</p>
+            <pre>Porcentaje de GEI = (Emisiones de tu zona / Emisiones globales) * 100</pre>
+        </div>
+    </div>
+
+    <script>
+        function calcularImpacto() {
+            const nombre = document.getElementById('nombreInput').value;
+            const zona = document.getElementById('zonaInput').value;
+            const gei = parseFloat(document.getElementById('geiInput').value);
+            const resultado = document.getElementById('resultado');
+            const gracias = document.getElementById('gracias');
+
+            // Validar entradas
+            if (nombre === "" || zona === "" || isNaN(gei) || gei < 0 || gei > 100) {
+                resultado.textContent = "Por favor, completa todos los campos con valores válidos.";
+                resultado.style.color = "#d32f2f";  // Color rojo para error
+                gracias.textContent = "";
+                return;
+            }
+
+            // Calcular impacto
+            if (gei < 50) {
+                resultado.textContent = `¡Felicidades, ${nombre}! Tu zona, ${zona}, tiene un impacto bajo en emisiones de GEI.`;
+                resultado.classList.add('green');
+                resultado.classList.remove('orange', 'red');
+            } else {
+                resultado.textContent = `Tu zona, ${zona}, tiene un impacto alto en emisiones de GEI, ${nombre}. Considera tomar medidas.`;
+                resultado.classList.add('orange');
+                resultado.classList.remove('green', 'red');
+            }
+
+            // Mensaje de agradecimiento
+            gracias.textContent = "¡Gracias por utilizar GEIMonitor!";
+        }
+    </script>
+</body>
+</html>
